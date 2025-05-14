@@ -1,0 +1,7 @@
+numpy
+pandas
+torch>=2.1.0
+torchvision>=0.15.0
+scikit-learn
+matplotlib
+seaborn==0.13.2
