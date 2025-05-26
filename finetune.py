@@ -31,6 +31,7 @@ def fine_tune(model, train_ds, test_loader, device,
     wrong_lbls = torch.cat(wrong_lbls)
     ft_loader = make_ft_loader(
         wrong_imgs, wrong_lbls, train_ds,
+        model=model,
         batch_size=batch_size, frac_wrong=0.5,
         conf_thresh=conf_thresh, device=device
     )
