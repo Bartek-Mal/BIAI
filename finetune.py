@@ -38,7 +38,9 @@ def fine_tune(model, train_ds, test_loader, device,
     if ft_loader is None:
         print("Żadne błędy nie spełniają progu pewności — skip FT.")
         return
-
+    # mierzenie przed FT
+    _, acc_before = eval_epoch(test_loader, model, None, device)
+    
     optimizer = optim.Adam(model.parameters(), lr=lr, weight_decay=1e-5)
     scheduler = torch.optim.lr_scheduler.ReduceLROnPlateau(
         optimizer, 'min', patience=1, factor=0.5
@@ -56,10 +58,10 @@ def fine_tune(model, train_ds, test_loader, device,
             break
 
     # restore jeśli FT pogorszył
-    _, acc_before = eval_epoch(test_loader, model, None, device)
     _, acc_after  = eval_epoch(test_loader, model, None, device)
+    
     if acc_after < acc_before:
         model.load_state_dict(torch.load('backup_before_ft.pth'))
-        print(f"FT pogorszył wynik ({acc_after:.4f}< {acc_before:.4f}); przywrócono oryginał.")
+        print(f"FT pogorszył wynik ({acc_after:.4f} < {acc_before:.4f}); przywrócono oryginał.")
     else:
         print(f"FT poprawił wynik ({acc_after:.4f} ≥ {acc_before:.4f}); zostawiam nowy model.")
