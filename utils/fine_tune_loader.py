@@ -3,10 +3,10 @@ import torch
 from torch.utils.data import DataLoader, TensorDataset
 import torch.nn.functional as F
 
-def make_ft_loader(wrong_imgs, wrong_lbls, base_ds,
+def make_ft_loader(wrong_imgs, wrong_lbls, base_ds, model,
                    batch_size, frac_wrong=0.5, conf_thresh=0.9, device='cpu'):
     # wybieramy tylko te błędy, które model sklasyfikował z pewnością >= conf_thresh
-    model = base_ds.dataset.model  # upewnij się, że dataset przechowuje referencję do modelu
+    # model = base_ds.dataset.model  # upewnij się, że dataset przechowuje referencję do modelu
     model.eval()
     keep_imgs, keep_lbls = [], []
     with torch.no_grad():
